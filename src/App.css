@@ -1,23 +1,44 @@
-body{
-  height: 100vh;
-}
-.weather-card {
-    height: 300px; 
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .app {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.3s ease-in-out; 
+    min-height: 100vh;
   }
   
-  .weather-card:hover {
-    transform: scale(1.10); 
+  main.flex-grow-1 {
+    flex-grow: 1;
   }
-  
-  .card-img-top {
-    max-height: 150px; 
-    object-fit: contain; 
+body {
+    background-image: url('/fotometeo.jpg');
+    background-size: cover; 
+    background-position: center; 
+    background-attachment: fixed; 
+    margin: 0; 
+    height: 100vh; 
   }
-  
-  .card-body {
-    flex-grow: 1; 
-  }
+  .weather-card {
+      height: 300px; 
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out; 
+    }
+    
+    .weather-card:hover {
+      transform: scale(1.10); 
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    
+    .card-img-top {
+      max-height: 150px; 
+      object-fit: contain; 
+    }
+    
+   
+    

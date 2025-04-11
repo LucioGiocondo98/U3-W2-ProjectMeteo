@@ -1,18 +1,26 @@
 import { Navbar, Container, Form, FormControl } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 
-const NavbarWeather = function ({
-  searchValue,
-  onSearchChange,
-  onSearchSubmit,
-}) {
+const NavbarWeather = ({ searchValue, onSearchChange }) => {
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchValue) {
+      navigate(`/weather-details?city=${searchValue}`);
+    }
+  };
+
   return (
-    <Navbar bg="secondary" expand="lg" className="mb-4 shadow-sm bg text-light">
+    <Navbar bg="secondary" expand="lg" className="mb-4 shadow-sm text-light">
       <Container className="justify-content-between">
-        <Navbar.Brand className="text-light">MeteoApp </Navbar.Brand>
-        <Form className="d-flex mx-auto w-50" onSubmit={onSearchSubmit}>
+        <Link to="/" className="navbar-brand text-light text-decoration-none">
+          MeteoApp
+        </Link>
+        <Form className="d-flex mx-auto w-50" onSubmit={handleSearchSubmit}>
           <FormControl
             type="search"
-            placeholder="Search a city..."
+            placeholder="Cerca una città..."
             className="me-2"
             value={searchValue}
             onChange={(e) => onSearchChange(e.target.value)}

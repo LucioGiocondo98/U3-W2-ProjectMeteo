@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 
-const WeatherCard = ({ city, weather }) => {
+const WeatherCard = ({ city, weather, onClick }) => {
   const convertToLocalTime = (utcTime, timezoneOffset) => {
     const localTimeInSeconds = utcTime + timezoneOffset;
     const localDate = new Date(localTimeInSeconds * 1000);
@@ -21,7 +21,10 @@ const WeatherCard = ({ city, weather }) => {
     weather.weather && weather.weather[0] ? weather.weather[0].icon : "";
 
   return (
-    <Card className="weather-card">
+    <Card
+      className="weather-card text-center d-flex flex-column align-items-center justify-content-center"
+      onClick={onClick}
+    >
       {weatherIcon && (
         <Card.Img
           variant="top"
