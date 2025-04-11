@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import WeatherCard from "./WeatherCard";
 
 const MainWeather = () => {
@@ -10,10 +10,12 @@ const MainWeather = () => {
   const defaultCities = [
     "New York",
     "Tokyo",
-    "Roma",
+    "Roma,it",
     "Londra",
     "San Francisco",
     "Pechino",
+    "Amsterdam",
+    "Parigi",
   ];
 
   const navigate = useNavigate();
@@ -23,10 +25,11 @@ const MainWeather = () => {
 
     return fetch(url)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Città non trovata: ${city}`);
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(`Errore nella richiesta per ${city}`);
         }
-        return response.json();
       })
       .catch((error) => {
         console.error(error);
@@ -48,7 +51,8 @@ const MainWeather = () => {
             setWeatherCards(results);
           }
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("Errore nel caricamento per ", city, err);
           results[index] = null;
           completedRequests++;
 
@@ -72,7 +76,7 @@ const MainWeather = () => {
       <Row>
         {weatherCards.length > 0 ? (
           weatherCards.map((weather, index) => (
-            <Col key={index} sm={12} md={4} lg={2} className="mb-4">
+            <Col key={index} sm={12} md={3} lg={3} className="mb-4">
               <WeatherCard
                 city={defaultCities[index]}
                 weather={weather}
@@ -81,7 +85,12 @@ const MainWeather = () => {
             </Col>
           ))
         ) : (
-          <p>Caricamento in corso...</p>
+          <div
+            className="d-flex justify-content-center align-items-center"
+            style={{ height: "100vh" }}
+          >
+            <Spinner animation="border" variant="light" />
+          </div>
         )}
       </Row>
     </Container>

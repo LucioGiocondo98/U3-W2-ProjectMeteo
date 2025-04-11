@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import WeatherCard from "./WeatherCard";
 import { Col, Container, Row } from "react-bootstrap";
+import NextDaysWeather from "./NextDaysWeather";
 
 const SingleCity = () => {
   const [weather, setWeather] = useState(null);
@@ -25,6 +26,7 @@ const SingleCity = () => {
       .catch((error) => {
         setError("Città non trovata o errore nella richiesta");
         setLoading(false);
+        console.log("errore nel recupero", error);
       });
   };
 
@@ -46,6 +48,12 @@ const SingleCity = () => {
           ) : (
             <p>Errore nel caricamento delle informazioni meteo</p>
           )}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <h4 className="text-center text-white mb-4">Prossimi 3 Giorni</h4>
+          <NextDaysWeather city={city} />
         </Col>
       </Row>
     </Container>

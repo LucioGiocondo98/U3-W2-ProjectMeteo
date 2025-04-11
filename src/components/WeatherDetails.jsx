@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import WeatherCard from "./WeatherCard";
-import { Col, Container, Row } from "react-bootstrap";
+import NextDaysWeather from "./NextDaysWeather";
 
 const WeatherDetails = () => {
   const [weather, setWeather] = useState(null);
@@ -11,41 +12,55 @@ const WeatherDetails = () => {
   const location = useLocation();
   const city = new URLSearchParams(location.search).get("city");
 
-  const myKey = "862e77528bc6cb4f843982801f5c11d1";
-
-  const fetchWeather = (city) => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${myKey}&units=metric&lang=it`;
-
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        setWeather(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError("Città non trovata o errore nella richiesta");
-        setLoading(false);
-      });
-  };
+  const apiKey = "862e77528bc6cb4f843982801f5c11d1";
 
   useEffect(() => {
+    const fetchWeather = () => {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=it`;
+      fetch(url)
+        .then((res) => {
+          if (!res.ok) throw new Error("Errore nella richiesta");
+          return res.json();
+        })
+        .then((data) => {
+          setWeather(data);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setError("Errore nel recupero dei dati meteo");
+          setLoading(false);
+        });
+    };
+
     if (city) {
-      fetchWeather(city);
+      fetchWeather();
     }
   }, [city]);
 
-  if (loading) return <p>Caricamento...</p>;
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: "100vh" }}
+      >
+        <Spinner animation="border" variant="light" />
+      </div>
+    );
+  }
   if (error) return <p>{error}</p>;
 
   return (
-    <Container>
+    <Container className="mt-5">
+      <Row className="justify-content-center mb-4">
+        <Col xs={12} md={6}>
+          <h4 className="text-center text-white mb-4">Today</h4>
+          <WeatherCard city={city} weather={weather} />
+        </Col>
+      </Row>
       <Row>
-        <Col xs={6}>
-          {weather ? (
-            <WeatherCard city={city} weather={weather} />
-          ) : (
-            <p>Errore nel caricamento delle informazioni meteo</p>
-          )}
+        <Col>
+          <h4 className="text-center text-white mb-4">Next 3 days</h4>
+          <NextDaysWeather city={city} />
         </Col>
       </Row>
     </Container>
